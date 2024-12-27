@@ -6,7 +6,7 @@ import sys
 import time
 import numpy as np
 from numpy.core.fromnumeric import put
-from numpy.lib.twodim_base import mask_indices
+# from numpy.lib.twodim_base import mask_indices
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
