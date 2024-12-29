@@ -1,4 +1,5 @@
 from inference import SwinDRNetPipeline
 
-ppl = SwinDRNetPipeline()
-ppl.inference(1,2)
+model_path = "models/model.pth"
+ppl = SwinDRNetPipeline(model_path)
+print(ppl.inference([[[1,2,3]]],[[[2]]]))

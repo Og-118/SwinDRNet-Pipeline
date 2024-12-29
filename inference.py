@@ -10,11 +10,13 @@ from networks.SwinDRNet import SwinDRNet
 from config import get_config
 
 class SwinDRNetPipeline():
-    def __init__(self):
+    def __init__(self, model_path):
         self.args = self.parser_init()
         self.config = get_config(self.args)
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model = SwinDRNet(self.config, img_size=self.args.img_size, num_classes=self.args.num_classes).cuda()
+        msg = self.model.load_state_dict(torch.load(model_path)['model_state_dict'])
+        print("self trained swin unet", msg)
         self.model.eval()
 
     def inference(self, rgb, depth):
