@@ -1,4 +1,11 @@
 import argparse
+import torch
+import cv2 as cv
+import numpy as np
+import PIL.Image as Image
+import torch.nn.functional as F
+
+from torchvision import transforms
 from networks.SwinDRNet import SwinDRNet
 from config import get_config
 
@@ -6,11 +13,49 @@ class SwinDRNetPipeline():
     def __init__(self):
         self.args = self.parser_init()
         self.config = get_config(self.args)
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model = SwinDRNet(self.config, img_size=self.args.img_size, num_classes=self.args.num_classes).cuda()
-        
+        self.model.eval()
+
     def inference(self, rgb, depth):
-        pred_ds, pred_ds_initial, confidence_sim_ds, confidence_initial = self.model(rgb, depth)
-        return pred_ds
+        '''
+        rgb should be in RGB and is np.array
+        depth should be one channel(meter) and is np.array
+        '''
+        target_size = (self.args.img_size, self.args.img_size)
+        h,w = rgb.shape
+        
+        # preprocess RGB
+        _rgb = cv.resize(rgb, target_size ,interpolation=cv.INTER_NEAREST)
+        _rgb = transforms.ToTensor()(_rgb)
+        _rgb = _rgb.unsqueeze(0)
+
+        # preprocess depth
+        _depth = depth
+        if len(_depth.shape) == 3:
+            _depth = _depth[:, :, 0]
+        _depth = _depth[np.newaxis, ...] 
+        _depth = _depth.transpose((1, 2, 0))  # To Shape: (H, W, 1)
+        _depth = cv.resize(_depth, target_size ,interpolation=cv.INTER_NEAREST)
+        _depth = _depth.transpose((2, 0, 1))  # To Shape: (1, H, W)
+        _depth[_depth <= 0] = 0.0
+        _depth = _depth.squeeze(0)
+        _depth = transforms.ToTensor()(np.uint8(_depth))
+        _depth = _depth.unsqueeze(0) 
+
+        # to device
+        _rgb = _rgb.to(self.device)
+        _depth = _depth.to(self.device)
+
+        # forward
+        with torch.no_grad():  
+            pred_ds, pred_ds_initial, confidence_sim_ds, confidence_initial = self.model(_rgb, _depth)
+            if  pred_ds.shape[2:] != (h,w):
+                # upsampling to origin rgb's resolution
+                pred_ds = F.interpolate(pred_ds,(h,w),mode='bilinear')
+            outputs_depth = np.array(pred_ds.cpu()).astype(np.uint16)
+
+        return outputs_depth
     
     def parser_init(self):
         parser = argparse.ArgumentParser()
