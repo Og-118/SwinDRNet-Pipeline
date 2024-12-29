@@ -19,10 +19,10 @@ class SwinDRNetPipeline():
         print("self trained swin unet", msg)
         self.model.eval()
 
-    def inference(self, rgb, depth):
+    def inference(self, rgb: np.ndarray, depth: np.ndarray):
         '''
-        rgb should be in RGB and is np.array
-        depth should be one channel(meter) and is np.array
+        rgb should be in RGB and is np.array;
+        depth should be in one channel(mm) and is np.array.
         '''
         target_size = (self.args.img_size, self.args.img_size)
         h,w = rgb.shape
@@ -34,13 +34,9 @@ class SwinDRNetPipeline():
 
         # preprocess depth
         _depth = depth
-        if len(_depth.shape) == 3:
-            _depth = _depth[:, :, 0]
-        _depth = _depth[np.newaxis, ...] 
-        _depth = _depth.transpose((1, 2, 0))  # To Shape: (H, W, 1)
         _depth = cv.resize(_depth, target_size ,interpolation=cv.INTER_NEAREST)
-        _depth = _depth.transpose((2, 0, 1))  # To Shape: (1, H, W)
-        _depth[_depth <= 0] = 0.0
+        _depth = _depth[np.newaxis, ...] 
+        _depth[_depth <= 0] = 0
         _depth = _depth.squeeze(0)
         _depth = transforms.ToTensor()(np.uint8(_depth))
         _depth = _depth.unsqueeze(0) 
