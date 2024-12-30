@@ -51,7 +51,7 @@ class SwinDRNetPipeline():
             if  pred_ds.shape[2:] != (h,w):
                 # upsampling to origin rgb's resolution
                 pred_ds = F.interpolate(pred_ds,(h,w),mode='bilinear')
-            outputs_depth = np.array(pred_ds.cpu()).astype(np.uint16)
+            outputs_depth = np.array(pred_ds.cpu()).astype(np.uint8)
 
         return outputs_depth
     
