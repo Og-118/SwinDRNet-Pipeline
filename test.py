@@ -15,10 +15,9 @@ result = ppl.inference(rgb, depth)
 
 # show
 rgb_scaled = cv2.normalize(rgb, None, 0, 255, cv2.NORM_MINMAX)
-depth_scaled = cv2.applyColorMap(cv2.normalize(depth, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8), cv2.COLORMAP_TURBO)
-result_scaled = cv2.applyColorMap(cv2.normalize(result, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8), cv2.COLORMAP_TURBO)
-true_scaled = cv2.applyColorMap(cv2.normalize(true, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8), cv2.COLORMAP_TURBO)
-
+depth_scaled = cv2.applyColorMap((depth/10).astype(np.uint8), cv2.COLORMAP_TURBO)
+result_scaled = cv2.applyColorMap((result/10).astype(np.uint8), cv2.COLORMAP_TURBO)
+true_scaled = cv2.applyColorMap((true/10).astype(np.uint8), cv2.COLORMAP_TURBO)
 fig, axes = plt.subplots(2, 2, figsize=(13, 10))
 
 axes[0, 0].imshow(rgb_scaled, cmap='gray')

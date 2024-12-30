@@ -24,26 +24,31 @@ class SwinDRNetPipeline():
         rgb should be in RGB and is np.array;
         depth should be in one channel(mm) and is np.array.
         '''
-        target_size = (self.args.img_size, self.args.img_size)
-        h,w = rgb.shape
+        target_size = (4*self.args.img_size, 4*self.args.img_size)
+        h,w,_ = rgb.shape
         
         # preprocess RGB
         _rgb = cv.resize(rgb, target_size ,interpolation=cv.INTER_NEAREST)
         _rgb = transforms.ToTensor()(_rgb)
         _rgb = _rgb.unsqueeze(0)
+        #transforms.ToPILImage()(_rgb.squeeze(0)).show()
 
         # preprocess depth
-        _depth = depth
+        _depth = depth/10
         _depth = cv.resize(_depth, target_size ,interpolation=cv.INTER_NEAREST)
         _depth = _depth[np.newaxis, ...] 
-        _depth[_depth <= 0] = 0
+        _depth[_depth <= 0] = 0.0
         _depth = _depth.squeeze(0)
         _depth = transforms.ToTensor()(np.uint8(_depth))
         _depth = _depth.unsqueeze(0) 
-
+        transforms.ToPILImage()(_depth.squeeze(0)).show()
         # to device
         _rgb = _rgb.to(self.device)
         _depth = _depth.to(self.device)
+        
+        #print('='*20)
+        # print(_depth)
+        #Image.fromarray(np.array(_rgb.cpu()).squeeze(), 'RGB').show()
 
         # forward
         with torch.no_grad():  
@@ -51,7 +56,7 @@ class SwinDRNetPipeline():
             if  pred_ds.shape[2:] != (h,w):
                 # upsampling to origin rgb's resolution
                 pred_ds = F.interpolate(pred_ds,(h,w),mode='bilinear')
-            outputs_depth = np.array(pred_ds.cpu()).astype(np.uint8)
+            outputs_depth = np.array(pred_ds.cpu()).squeeze(0).squeeze(0)*2550
 
         return outputs_depth
     
