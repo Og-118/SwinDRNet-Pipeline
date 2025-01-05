@@ -2,16 +2,22 @@
 
 This work is a SwinDRNet pipeline for Intel Realsense D435i, and may work for other depth cameras.
 
-## System Dependencies (May not required)
+## System Dependencies (May not required for just using)
 ```bash
 sudo apt-get install libhdf5-10 libhdf5-serial-dev libhdf5-dev libhdf5-cpp-11
 sudo apt install libopenexr-dev zlib1g-dev openexr
 ```
 ## Setup
 - ### Install pip dependencies
-They have tested on Ubuntu 20.04 with an NVIDIA GeForce RTX 2080 and NVIDIA GeForce RTX 3090 with Python 3.7. The code may work on other systems. Install the dependencies using pip:
+They have tested on Ubuntu 20.04 with an NVIDIA GeForce RTX 2080 and NVIDIA GeForce RTX 3090 with Python 3.7, I have tested on Ubuntu 20.04 with an NVIDIA GeForce GTX 1650Ti with Python 3.11, and The code may work on other systems. Install the dependencies using pip.
+You can try this if you are adding the pipeline to an existing project (environment):
+**This may break your environment! Make sure you have a backup.**
 ```bash
-pip install -r requirments.txt
+pip install -r requirments_no_version.txt
+```
+or you can use this with version limitation, but the version may be outdated:
+```bash
+pip install -r requirments_version.txt
 ```
 - ### Download models
 
