@@ -9,9 +9,11 @@ sudo apt install libopenexr-dev zlib1g-dev openexr
 ```
 ## Setup
 - ### Install pip dependencies
+
+**This may break your environment! Make sure you have a backup.**
+
 They have tested on Ubuntu 20.04 with an NVIDIA GeForce RTX 2080 and NVIDIA GeForce RTX 3090 with Python 3.7, I have tested on Ubuntu 20.04 with an NVIDIA GeForce GTX 1650Ti with Python 3.11, and The code may work on other systems. Install the dependencies using pip.
 You can try this if you are adding the pipeline to an existing project (environment):
-**This may break your environment! Make sure you have a backup.**
 ```bash
 pip install -r requirments_no_version.txt
 ```
