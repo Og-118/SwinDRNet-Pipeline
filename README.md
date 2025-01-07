@@ -31,6 +31,7 @@ bash DOWNLOAD.sh
 cd ..
 ```
 - ### Testing
+The result is in the log folder. You need to pay attention to the details of transparent items, not the whole image. Masks is recommended for real application.
 Below is an example for testing the trained SwinDRNet model:
 ```bash
 python test.py
