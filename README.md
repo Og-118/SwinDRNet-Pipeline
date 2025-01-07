@@ -38,7 +38,7 @@ python test.py
 ```
 ## License and Credit
 
-This work is based on [*official SwinDRNet*](https://pku-epic.github.io/DREDS/) and [*SwinDRNet by rnlee*](https://github.com/rnlee1998/SwinDRNet).
+This work is based on [*official SwinDRNet*](https://pku-epic.github.io/DREDS/) and [*SwinDRNet by rnlee1998*](https://github.com/rnlee1998/SwinDRNet).
 The test data is from [*ClearPose*](https://github.com/opipari/ClearPose).
 
  This work and are licensed under [*CC BY-NC 4.0*][cc-by-nc].
