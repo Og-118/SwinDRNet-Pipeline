@@ -7,9 +7,9 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from testdata.log.save_log import Save
 # test
 model_path = "models/model.pth"
-rgb = np.array(Image.open("testdata/000200-color.png").convert('RGB'))
-depth = np.array(cv2.imread("testdata/000200-depth.png", cv2.IMREAD_ANYCOLOR | cv2.IMREAD_ANYDEPTH))
-true = np.array(cv2.imread("testdata/000200-depth_true.png", cv2.IMREAD_ANYCOLOR | cv2.IMREAD_ANYDEPTH))
+rgb = np.array(Image.open("testdata/010000-color.png").convert('RGB'))
+depth = np.array(cv2.imread("testdata/010000-depth.png", cv2.IMREAD_ANYCOLOR | cv2.IMREAD_ANYDEPTH))
+true = np.array(cv2.imread("testdata/010000-depth_true.png", cv2.IMREAD_ANYCOLOR | cv2.IMREAD_ANYDEPTH))
 ppl = SwinDRNetPipeline(model_path)
 result = ppl.inference(rgb, depth)
 
