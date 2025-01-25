@@ -19,12 +19,13 @@ class SwinDRNetPipeline():
         print("self trained swin unet", msg)
         self.model.eval()
 
-    def inference(self, rgb: np.ndarray, depth: np.ndarray):
+    def inference(self, rgb: np.ndarray, depth: np.ndarray, target_size_factor = 1):
         '''
         rgb should be in RGB and is np.array;
         depth should be in one channel(mm) and is np.array.
+        target size factor can be changed for better result.
         '''
-        target_size = (6*self.args.img_size, 6*self.args.img_size)
+        target_size = (target_size_factor*self.args.img_size, target_size_factor*self.args.img_size)
         h,w,_ = rgb.shape
         
         # preprocess RGB
@@ -61,7 +62,8 @@ class SwinDRNetPipeline():
         output_size = (output_depth.shape[1], output_depth.shape[0])
         output_depth_mapped = output_depth * cv.resize(np.array(confidence_initial.cpu()).squeeze(0).squeeze(0), output_size)\
                               + depth * cv.resize(np.array(confidence_sim_ds.cpu()).squeeze(0).squeeze(0), output_size)
-        #print(cv.resize(np.array(confidence_initial.cpu()).squeeze(0).squeeze(0), output_size))
+        #return cv.resize(np.array(confidence_initial.cpu()).squeeze(0).squeeze(0), output_size)*2550
+        return output_depth
         return output_depth_mapped
     
     def parser_init(self):
