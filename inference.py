@@ -63,7 +63,7 @@ class SwinDRNetPipeline():
         output_depth_mapped = output_depth * cv.resize(np.array(confidence_initial.cpu()).squeeze(0).squeeze(0), output_size)\
                               + depth * cv.resize(np.array(confidence_sim_ds.cpu()).squeeze(0).squeeze(0), output_size)
         #return cv.resize(np.array(confidence_initial.cpu()).squeeze(0).squeeze(0), output_size)*2550
-        return output_depth
+        #return output_depth
         return output_depth_mapped
     
     def parser_init(self):
