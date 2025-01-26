@@ -33,7 +33,7 @@ class SwinDRNetPipeline():
         h,w,_ = rgb.shape
         
         # preprocess RGB
-        _rgb = rgb/255
+        _rgb = rgb.astype(np.float32)/255
         #_rgb = cv.resize(rgb, target_size ,interpolation=cv.INTER_NEAREST)
         _rgb = zoom(_rgb,rgb_zoom).astype(np.float32)
         _rgb = transforms.ToTensor()(_rgb)
