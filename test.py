@@ -11,7 +11,7 @@ rgb = np.array(Image.open("testdata/010000-color.png").convert('RGB'))
 depth = np.array(cv2.imread("testdata/010000-depth.png", cv2.IMREAD_ANYCOLOR | cv2.IMREAD_ANYDEPTH))
 true = np.array(cv2.imread("testdata/010000-depth_true.png", cv2.IMREAD_ANYCOLOR | cv2.IMREAD_ANYDEPTH))
 ppl = SwinDRNetPipeline(model_path)
-result = ppl.inference(rgb, depth, 4, 1500)
+result = ppl.inference(rgb, depth, 4, 3000)
 
 # show
 rgb_scaled = cv2.normalize(rgb, None, 0, 255, cv2.NORM_MINMAX)
